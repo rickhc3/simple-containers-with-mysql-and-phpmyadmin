@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: table_1
+      MYSQL_USER: foobar
+      MYSQL_PASSWORD: foobar
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - mynet
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 12345
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    driver: bridge
